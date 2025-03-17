@@ -241,13 +241,16 @@ The Cluster Observability Operator (COO) is an optional component of the OpenShi
     8. Validation
 
         Access the COO Prometheus UI
+       
         ![Alt text](./pics/prometheus_target.jpg?raw=true "Prometheus ") 
 
         Samples of promql queries:
             - cluster:node_cpu:ratio_rate5m{cluster=""}
+       
             ![Alt text](./pics/prometheus_sample1.jpg?raw=true "Prometheus ") 
 
             - sum(node_namespace_pod_container:container_cpu_usage_seconds_total:sum_irate{cluster="", namespace="openshift-multus"}) by (pod)
+       
             ![Alt text](./pics/prometheus_sample2.jpg?raw=true "Prometheus ") 
 
 3. Create a PrometheusRule defining the required rules
@@ -263,6 +266,7 @@ The Cluster Observability Operator (COO) is an optional component of the OpenShi
 
         Check in Prometheus UI that the alerts rules have been created
         Alerts configured in PrometheusRules are loaded in Prometheus UI
+       
         ![Alt text](./pics/prometheus_rules.jpg?raw=true "Prometheus ") 
 
 4. Configure AlertManager
@@ -404,12 +408,15 @@ The Cluster Observability Operator (COO) is an optional component of the OpenShi
             In my test I see two alerts forwarded by the alertmanager to the alert server. The first two alerts are firing in ROSA, the first is the Watchdog and the second is a memory warning. The third alert is the one created manually, above, in a previous step of this procedure:
 
             - Alert1:
+              
                 ![Alt text](./pics/alert1.jpg?raw=true "Alert ") 
 
             - Alert2:
+              
                 ![Alt text](./pics/alert2.jpg?raw=true "Alert ") 
 
             - Alert3:
+              
                 ![Alt text](./pics/alert3.jpg?raw=true "Alert ") 
 
 ## Also recommend checking the following blog:
