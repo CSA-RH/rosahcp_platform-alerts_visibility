@@ -337,7 +337,7 @@ The Cluster Observability Operator (COO) is an optional component of the OpenShi
             EOF
             ```
 
-        5. (Optional): One can generate alarms against the alertmanager.
+        5. (Optional): One can generate alarms against the alertmanager
         
             In order to check if the AlertManager is forwarding the alerts towards the alert server, one can create alerts on the AlertManager using the following commands. Anyhow the ROSA cluster must always have a Watchdog alert firing.
 
