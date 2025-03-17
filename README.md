@@ -257,6 +257,10 @@ The Cluster Observability Operator (COO) is an optional component of the OpenShi
 
     1. Create a PrometheusRule on the federate-cmo namespace
 
+        The PrometheusRules constants the rules to trigger the alerts.
+        I used as a reference the PrometheusRules from the platform.
+        Make sure to configure the yaml manifest with the API of the COO (i.e. prometheusrules.monitoring.rhobs).
+
         ```$bash
         oc clone …….. 
         oc create -f files/all_prometheusrules.yaml
