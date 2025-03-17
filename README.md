@@ -235,8 +235,7 @@ The Cluster Observability Operator (COO) is an optional component of the OpenShi
                   name: openshift-service-ca.crt
         EOF
         ```
-
-Setting a very low scrape interval can lead to performance and resource-related challenges, including increased CPU/memory usage, network overhead, load on monitored targets, and management complexity. In most environments, maintaining a balance between data freshness and resource consumption is essential, and setting these values to reasonable intervals (such as 30 to 60 seconds) is a good practice to achieve efficient and scalable monitoring.
+        Setting a very low scrape interval can lead to performance and resource-related challenges, including increased CPU/memory usage, network overhead, load on monitored targets, and management complexity. In most environments, maintaining a balance between data freshness and resource consumption is essential, and setting these values to reasonable intervals (such as 30 to 60 seconds) is a good practice to achieve efficient and scalable monitoring.
 
     7. Validation
         Access the COO Prometheus UI
