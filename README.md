@@ -158,3 +158,265 @@ The Cluster Observability Operator (COO) is an optional component of the OpenShi
     ```
 
     5. Configure Routes to expose the Prometheus and Alertmanager UI deployed by COO
+        1. Prometheus
+
+        ```$bash
+        oc create route edge prometheus-coo --service=federate-cmo-ms-prometheus --port=9090 -n federate-cmo
+        ```
+   
+        2. AlertManager
+
+        ```$bash
+        oc create route edge alertmanager-coo --service=federate-cmo-ms-alertmanager --port=9093 -n federate-cmo
+        ```
+
+    6. Create ServiceMonitor 
+    The ServiceMonitor contains the configuration to enable scraping the federation endpoint of the platform Prometheus instances.
+
+    ```$bash
+    cat <<EOF | oc apply -f -
+    apiVersion: monitoring.rhobs/v1
+    kind: ServiceMonitor
+    metadata:
+      name: federate-cmo-smon
+      namespace: federate-cmo
+      labels:
+        kubernetes.io/part-of: federate-cmo-ms
+        monitoring.rhobs/stack: federate-cmo-ms
+    
+    spec:
+      selector: #use the prometheus service to create a "dummy" target.
+        matchLabels:
+          app.kubernetes.io/managed-by: observability-operator
+          app.kubernetes.io/name: federate-cmo-ms-prometheus
+    
+      endpoints:
+      - params:
+          'match[]': #scrape only required metrics from in-cluster prometheus
+            - '{__name__=~".+"}'
+            - '{__name__=~"^job:.*"}'
+            - '{job="prometheus"}'
+            - '{job="node"}'
+            - '{__name__="server_labels"}'
+            #- '{__name__=~"container_cpu_.*", namespace="federate-cmo"}'
+            #- '{__name__="container_memory_working_set_bytes", namespace="federate-cmo"}'
+    
+        relabelings:
+        # relabel example
+        - targetLabel: source
+          replacement: my-openshift-cluster
+    
+        # override the target's address by the prometheus-k8s service name.
+        - action: replace
+          targetLabel: __address__
+          replacement: prometheus-k8s.openshift-monitoring.svc:9091
+    
+        #remove the default target labels as they aren't relevant in case of federation.
+        - action: labeldrop
+          regex: pod|namespace|service|endpoint|container
+    
+        # 30s interval creates 4 scrapes per minute
+        #    prometheus-k8s.svc x 2 ms-prometheus x (60s/ 30s) = 4
+        interval: 30s
+    
+        #ensure that the scraped labels are preferred over target's labels.
+        honorLabels: true
+    
+        port: web
+        scheme: https
+        path: "/federate"
+    
+        bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+    
+        tlsConfig:
+          serverName: prometheus-k8s.openshift-monitoring.svc
+          ca:
+            configMap: #automatically created by serving-ca operator
+              key: service-ca.crt
+              name: openshift-service-ca.crt
+    EOF
+    ```
+
+Setting a very low scrape interval can lead to performance and resource-related challenges, including increased CPU/memory usage, network overhead, load on monitored targets, and management complexity. In most environments, maintaining a balance between data freshness and resource consumption is essential, and setting these values to reasonable intervals (such as 30 to 60 seconds) is a good practice to achieve efficient and scalable monitoring.
+
+
+
+    7. Validation
+    Access the COO Prometheus UI
+    ![Alt text](./pics/prometheus_target.jpg?raw=true "Prometheus ") 
+
+    Samples of promql queries:
+        - cluster:node_cpu:ratio_rate5m{cluster=""}
+        ![Alt text](./pics/prometheus_sample1.jpg?raw=true "Prometheus ") 
+
+        - sum(node_namespace_pod_container:container_cpu_usage_seconds_total:sum_irate{cluster="", namespace="openshift-multus"}) by (pod)
+        ![Alt text](./pics/prometheus_sample2.jpg?raw=true "Prometheus ") 
+
+3. Create a PrometheusRule defining the required rules
+
+    1. Configure Routes to expose the Prometheus and Alertmanager UI deployed by COO
+
+    ```$bash
+    oc clone …….. 
+    oc create -f files/all_prometheusrules.yaml
+    ```
+
+    2. Validate
+
+    Check in Prometheus UI that the alerts rules have been created
+    Alerts configured in PrometheusRules are loaded in Prometheus UI
+    ![Alt text](./pics/prometheus_rules.jpg?raw=true "Prometheus ") 
+
+4. Configure AlertManager
+
+In order to create the alerts and send them to an external Alarms server, the alert manager has to be configured.
+
+    1. Configure AlertManager requests and limits
+
+    ```$bash
+    oc edit alertmanagers.monitoring.rhobs federate-cmo-ms
+    
+    ...
+    ...
+    spec:
+      …
+      …
+      resources:
+        limits:
+          cpu: 500m 
+          memory: 1Gi
+        requests:
+          cpu: 200m
+          memory: 500Mi
+    ```
+
+    2. Create a AlertManager receiver to send the Alerts to a Alert Server:
+    To simulate an Alert Server we will use the service provided in https://webhook.site.
+
+        1. Setup the AlertServer
+        To simulate the alert server were the alerts will be sent, we used the site https://webhook.site and sent HTTP Posts to the Webhook configured using the secret  alertmanager-<namespace_monitoring-stack>-ms”. Webhook complete link: https://webhook.site/767c84e8-4707-4a85-bd2a-07174d2ad948
+
+        2. Create namespace
+        NOTE: The customized secret name should be: alertmanager-<namespace_monitoring-stack>-ms
+        For my test the secret name is “alertmanager-federate-cmo-ms”
+
+        ```$bash
+        cat <<EOF | oc apply -f -
+        apiVersion: v1
+        kind: Secret
+        metadata:
+          name: alertmanager-federate-cmo-ms
+        stringData:
+          alertmanager.yaml: |
+            receivers:
+              - name: Default
+                webhook_configs:
+                  - url: 'https://webhook.site/767c84e8-4707-4a85-bd2a-07174d2ad948'
+              - name: Watchdog
+              - name: Critical
+            route:
+              group_by:
+                - namespace
+              group_interval: 5m
+              group_wait: 30s
+              receiver: Default
+              repeat_interval: 12h
+              routes:
+                - matchers:
+                  receiver: Default
+        EOF
+
+        ```
+
+        3. (Optional): One can generate alarms against the alertmanager.
+        In order to check if the AlertManager is forwarding the alerts towards the alert server, one can create alerts on the AlertManager using the following commands. Anyhow the ROSA cluster must always have a Watchdog alert firing.
+
+
+            1. Connect to one of the alertmanager pods
+
+            ```$bash
+            oc -n federate-cmo get pods | grep alert
+            alertmanager-federate-cmo-ms-0   2/2 	Running   0      	29m
+            alertmanager-federate-cmo-ms-1   2/2 	Running   0      	29m
+            ```
+
+            2. Get to the shell of one of the alertmanager pods
+
+            ```$bash
+            oc -n federate-cmo rsh alertmanager-federate-cmo-ms-0
+            sh-4.4$            
+            ```
+
+            3. Generate a alarm against the alertmanager
+            
+            ```$bash
+            curl -vvv -XPOST http://localhost:9093/api/v2/alerts -H "Content-Type: application/json" -d '[
+              {
+                "status": "firing",
+                "labels": {
+                  "alertname": "TestManualAlert",
+                  "severity": "critical"
+                },
+                "annotations": {
+                  "summary": "Test Manual Alert",
+                  "description": "Esta es una alerta enviada manualmente a Alertmanager"
+                }
+              }
+            ]'
+            ```
+
+            ```$bash
+            ---output
+            sh-4.4$ curl -vvv -XPOST http://localhost:9093/api/v2/alerts -H "Content-Type: application/json" -d '[
+            >   {
+            >     "status": "firing",
+            >     "labels": {
+            >       "alertname": "TestManualAlert",
+            >       "severity": "critical"
+            >     },
+            >     "annotations": {
+            >       "summary": "Test Manual Alert",
+            >       "description": "Esta es una alerta enviada manualmente a Alertmanager"
+            >     }
+            >   }
+            > ]'
+            Note: Unnecessary use of -X or --request, POST is already inferred.
+            *   Trying ::1...
+            * TCP_NODELAY set
+            * Connected to localhost (::1) port 9093 (#0)
+            > POST /api/v2/alerts HTTP/1.1
+            > Host: localhost:9093
+            > User-Agent: curl/7.61.1
+            > Accept: */*
+            > Content-Type: application/json
+            > Content-Length: 267
+            > 
+            * upload completely sent off: 267 out of 267 bytes
+            < HTTP/1.1 200 OK
+                        < Cache-Control: no-store
+            < Vary: Origin
+            < Date: Thu, 13 Mar 2025 14:20:02 GMT
+            < Content-Length: 0
+            < 
+            * Connection #0 to host localhost left intact
+            sh-4.4$
+
+            ```
+
+        4. Validate that the Alert was sent to the alert server
+        https://webhook.site/#!/view/767c84e8-4707-4a85-bd2a-07174d2ad948/b9876c8d-6ec0-41f5-9ac3-e4583c3a61a1/1
+
+        In my test I see two alerts forwarded by the alertmanager to the alert server. The first two alerts are firing in ROSA, the first is the Watchdog and the second is a memory warning. The third alert is the one created manually, above, in a previous step of this procedure:
+
+            - Alert1:
+            ![Alt text](./pics/alert1.jpg?raw=true "Alert ") 
+
+            - Alert2:
+            ![Alt text](./pics/alert2.jpg?raw=true "Alert ") 
+
+            - Alert3:
+            ![Alt text](./pics/alert3.jpg?raw=true "Alert ") 
+
+## Also recommend checking the following blog:
+Step-by-step guide to configuring alerts in Cluster Observability Operator
+https://developers.redhat.com/articles/2024/12/16/step-step-guide-configuring-alerts-cluster-observability-operator?source=sso
