@@ -171,7 +171,8 @@ The Cluster Observability Operator (COO) is an optional component of the OpenShi
             oc create route edge alertmanager-coo --service=federate-cmo-ms-alertmanager --port=9093 -n federate-cmo
             ```
 
-    6. Create ServiceMonitor 
+    6. Create ServiceMonitor
+   
         The ServiceMonitor contains the configuration to enable scraping the federation endpoint of the platform Prometheus instances.
 
         ```$bash
@@ -237,7 +238,7 @@ The Cluster Observability Operator (COO) is an optional component of the OpenShi
         ```
         Setting a very low scrape interval can lead to performance and resource-related challenges, including increased CPU/memory usage, network overhead, load on monitored targets, and management complexity. In most environments, maintaining a balance between data freshness and resource consumption is essential, and setting these values to reasonable intervals (such as 30 to 60 seconds) is a good practice to achieve efficient and scalable monitoring.
 
-    7. Validation
+    8. Validation
         Access the COO Prometheus UI
         ![Alt text](./pics/prometheus_target.jpg?raw=true "Prometheus ") 
 
