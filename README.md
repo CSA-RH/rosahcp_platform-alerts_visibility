@@ -297,6 +297,7 @@ The Cluster Observability Operator (COO) is an optional component of the OpenShi
         ```
 
     2. Create a AlertManager receiver to send the Alerts to a Alert Server:
+       
         To simulate an Alert Server we will use the service provided in https://webhook.site.
 
         1. Setup the AlertServer
