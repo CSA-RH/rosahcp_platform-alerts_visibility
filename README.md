@@ -294,7 +294,7 @@ The Cluster Observability Operator (COO) is an optional component of the OpenShi
     1. Configure AlertManager requests and limits
 
         ```$bash
-        oc edit alertmanagers.monitoring.rhobs federate-cmo-ms
+        oc -n federate-cmo edit alertmanagers.monitoring.rhobs federate-cmo-ms
     
         ...
         ...
