@@ -300,9 +300,11 @@ The Cluster Observability Operator (COO) is an optional component of the OpenShi
         To simulate an Alert Server we will use the service provided in https://webhook.site.
 
         1. Setup the AlertServer
+           
             To simulate the alert server were the alerts will be sent, we used the site https://webhook.site and sent HTTP Posts to the Webhook configured using the secret  alertmanager-<namespace_monitoring-stack>-ms”. Webhook complete link: https://webhook.site/767c84e8-4707-4a85-bd2a-07174d2ad948
 
-        2. Create namespace
+        3. Create namespace
+           
             NOTE: The customized secret name should be: alertmanager-<namespace_monitoring-stack>-ms
             For my test the secret name is “alertmanager-federate-cmo-ms”
 
@@ -333,8 +335,9 @@ The Cluster Observability Operator (COO) is an optional component of the OpenShi
             EOF
             ```
 
-        3. (Optional): One can generate alarms against the alertmanager.
-        In order to check if the AlertManager is forwarding the alerts towards the alert server, one can create alerts on the AlertManager using the following commands. Anyhow the ROSA cluster must always have a Watchdog alert firing.
+        5. (Optional): One can generate alarms against the alertmanager.
+        
+            In order to check if the AlertManager is forwarding the alerts towards the alert server, one can create alerts on the AlertManager using the following commands. Anyhow the ROSA cluster must always have a Watchdog alert firing.
 
             - Connect to one of the alertmanager pods
 
@@ -406,7 +409,7 @@ The Cluster Observability Operator (COO) is an optional component of the OpenShi
                 sh-4.4$
                 ```
 
-        4. Validate that the Alert was sent to the alert server
+        6. Validate that the Alert was sent to the alert server
             https://webhook.site/#!/view/767c84e8-4707-4a85-bd2a-07174d2ad948/b9876c8d-6ec0-41f5-9ac3-e4583c3a61a1/1
 
             In my test I see two alerts forwarded by the alertmanager to the alert server. The first two alerts are firing in ROSA, the first is the Watchdog and the second is a memory warning. The third alert is the one created manually, above, in a previous step of this procedure:
