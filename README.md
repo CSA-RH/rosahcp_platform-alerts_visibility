@@ -65,6 +65,19 @@ The Cluster Observability Operator (COO) is an optional component of the OpenShi
         EOF
         ```
 
+
+    4. Wait for the pods to be running
+
+        ```$bash
+        oc -n openshift-cluster-observability-operator get pods
+
+        NAME                                                    	READY   STATUS	RESTARTS   AGE
+        obo-prometheus-operator-6b75c99f74-xz4nf                	1/1 	Running   0      	47s
+        obo-prometheus-operator-admission-webhook-c55d86748-ldsvs   1/1 	Running   0      	47s
+        obo-prometheus-operator-admission-webhook-c55d86748-v999m   1/1 	Running   0      	47s
+        observability-operator-6b8cb6987-g2249                  	1/1 	Running   0      	47s
+        ```
+        
 2. Create and configure COO
 
     1. Create namespace
