@@ -13,6 +13,7 @@ The objective is to use the MonitoringStack CRD from the Cluster Observability O
 ![Alt text](./pics/architecture.jpg?raw=true "Architecture ") 
 
 <code style="color : Gold">Yellow: Cluster Monitoring Operator resources (platform monitoring stack)</code>
+
 <code style="color : Blue">Blue: Cluster Observability Operator resources</code>
 
 # Procedure
