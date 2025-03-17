@@ -157,7 +157,7 @@ The Cluster Observability Operator (COO) is an optional component of the OpenShi
         prometheus-federate-cmo-ms-1 	3/3 	Running   0      	92s
         ```
 
-    5. .Create a PrometheusRule on the federate-cmo namespace
+    5. Configure Routes to expose the Prometheus and Alertmanager UI deployed by COO
 
         1. Prometheus
 
