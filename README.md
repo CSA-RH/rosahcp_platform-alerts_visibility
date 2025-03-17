@@ -291,7 +291,7 @@ The Cluster Observability Operator (COO) is an optional component of the OpenShi
 
     In order to create the alerts and send them to an external Alarms server, the alert manager has to be configured.
 
-    1. Configure AlertManager requests and limits
+    1. Configure AlertManager requests and limits under spec.
 
         ```$bash
         oc -n federate-cmo edit alertmanagers.monitoring.rhobs federate-cmo-ms
