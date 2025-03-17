@@ -277,7 +277,7 @@ The Cluster Observability Operator (COO) is an optional component of the OpenShi
 
         ```$bash
         git clone https://github.com/CSA-RH/rosahcp_platform-alerts_visibility.git
-        oc create -f files/all_prometheusrules.yaml
+        oc create -f rosahcp_platform-alerts_visibility/files/all_prometheusrules.yaml
         ```
 
     2. Validate
