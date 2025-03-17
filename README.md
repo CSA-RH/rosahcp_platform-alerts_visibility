@@ -276,7 +276,7 @@ The Cluster Observability Operator (COO) is an optional component of the OpenShi
         Make sure to configure the yaml manifest with the API of the COO (i.e. prometheusrules.monitoring.rhobs).
 
         ```$bash
-        oc clone https://github.com/CSA-RH/rosahcp_platform-alerts_visibility.git
+        git clone https://github.com/CSA-RH/rosahcp_platform-alerts_visibility.git
         oc create -f files/all_prometheusrules.yaml
         ```
 
