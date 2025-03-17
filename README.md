@@ -317,7 +317,7 @@ The Cluster Observability Operator (COO) is an optional component of the OpenShi
         1. Setup the AlertServer
            
             To simulate the alert server were the alerts will be sent, we used the site https://webhook.site and sent HTTP Posts to the Webhook configured using the secret  alertmanager-<namespace_monitoring-stack>-ms”.
-            My Webhook complete link was, yours should be different!: https://webhook.site/767c84e8-4707-4a85-bd2a-07174d2ad948
+            My Webhook link was, (note: yours webhook URL must be different!: https://webhook.site/767c84e8-4707-4a85-bd2a-07174d2ad948
 
         3. Create namespace
            
