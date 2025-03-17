@@ -244,14 +244,14 @@ The Cluster Observability Operator (COO) is an optional component of the OpenShi
        
         ![Alt text](./pics/prometheus_target.jpg?raw=true "Prometheus ") 
 
-        Samples of promql queries:
+        - Samples of promql queries:
             - cluster:node_cpu:ratio_rate5m{cluster=""}
        
-            ![Alt text](./pics/prometheus_sample1.jpg?raw=true "Prometheus ") 
+                ![Alt text](./pics/prometheus_sample1.jpg?raw=true "Prometheus ") 
 
             - sum(node_namespace_pod_container:container_cpu_usage_seconds_total:sum_irate{cluster="", namespace="openshift-multus"}) by (pod)
        
-            ![Alt text](./pics/prometheus_sample2.jpg?raw=true "Prometheus ") 
+                ![Alt text](./pics/prometheus_sample2.jpg?raw=true "Prometheus ") 
 
 3. Create a PrometheusRule defining the required rules
 
