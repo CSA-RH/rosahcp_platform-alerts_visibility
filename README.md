@@ -266,6 +266,7 @@ The Cluster Observability Operator (COO) is an optional component of the OpenShi
 4. Configure AlertManager
 
     In order to create the alerts and send them to an external Alarms server, the alert manager has to be configured.
+
     1. Configure AlertManager requests and limits
 
         ```$bash
@@ -325,7 +326,7 @@ The Cluster Observability Operator (COO) is an optional component of the OpenShi
         3. (Optional): One can generate alarms against the alertmanager.
         In order to check if the AlertManager is forwarding the alerts towards the alert server, one can create alerts on the AlertManager using the following commands. Anyhow the ROSA cluster must always have a Watchdog alert firing.
 
-            1. Connect to one of the alertmanager pods
+            - Connect to one of the alertmanager pods
 
                 ```$bash
                 oc -n federate-cmo get pods | grep alert
@@ -333,14 +334,14 @@ The Cluster Observability Operator (COO) is an optional component of the OpenShi
                 alertmanager-federate-cmo-ms-1   2/2 	Running   0      	29m
                 ```
 
-            2. Get to the shell of one of the alertmanager pods
+            - Get to the shell of one of the alertmanager pods
 
                 ```$bash
                 oc -n federate-cmo rsh alertmanager-federate-cmo-ms-0
                 sh-4.4$            
                 ```
 
-            3. Generate a alarm against the alertmanager
+            - Generate a alarm against the alertmanager
             
                 ```$bash
                 curl -vvv -XPOST http://localhost:9093/api/v2/alerts -H "Content-Type: application/json" -d '[
@@ -412,3 +413,20 @@ The Cluster Observability Operator (COO) is an optional component of the OpenShi
 ## Also recommend checking the following blog:
 Step-by-step guide to configuring alerts in Cluster Observability Operator
 https://developers.redhat.com/articles/2024/12/16/step-step-guide-configuring-alerts-cluster-observability-operator?source=sso
+
+
+
+
+
+
+    5. Configure Routes to expose the Prometheus and Alertmanager UI deployed by COO
+
+    ```$bash
+    ```
+
+
+        1. Create namespace
+
+        ```$bash
+        ```
+   
