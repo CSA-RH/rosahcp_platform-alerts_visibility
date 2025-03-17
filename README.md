@@ -255,7 +255,7 @@ The Cluster Observability Operator (COO) is an optional component of the OpenShi
 
 3. Create a PrometheusRule defining the required rules
 
-    1. Configure Routes to expose the Prometheus and Alertmanager UI deployed by COO
+    1. Create a PrometheusRule on the federate-cmo namespace
 
         ```$bash
         oc clone …….. 
