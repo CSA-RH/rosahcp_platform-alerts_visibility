@@ -22,13 +22,13 @@ The Cluster Observability Operator (COO) is an optional component of the OpenShi
 
     1. Create namespace
 
-    ```$bash
-    cat <<EOF | oc apply -f -
-    apiVersion: v1
-    kind: Namespace
-    metadata:
-      name: openshift-cluster-observability-operator
-    EOF
+        ```$bash
+        cat <<EOF | oc apply -f -
+        apiVersion: v1
+        kind: Namespace
+        metadata:
+          name: openshift-cluster-observability-operator
+        EOF
     ```
 
     2. Create Operator Group
