@@ -254,7 +254,7 @@ The Cluster Observability Operator (COO) is an optional component of the OpenShi
 
     8. Validation
 
-        Access the COO Prometheus UI
+        Access the COO Prometheus UI and check that the endpoint https://prometheus-k8s.openshift-monitoring.svc:9091/federate state is UP.
        
         ![Alt text](./pics/prometheus_target.jpg?raw=true "Prometheus ") 
 
