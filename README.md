@@ -331,6 +331,7 @@ The Cluster Observability Operator (COO) is an optional component of the OpenShi
             kind: Secret
             metadata:
               name: alertmanager-federate-cmo-ms
+              namespace: federate-cmo
             stringData:
               alertmanager.yaml: |
                 receivers:
