@@ -78,7 +78,7 @@ The Cluster Observability Operator (COO) is an optional component of the OpenShi
         observability-operator-6b8cb6987-g2249                  	1/1 	Running   0      	47s
         ```
         
-2. Create and configure COO
+2. Create and configure MonitoringStack and ServiceMonitor
 
     1. Create namespace
 
