@@ -264,7 +264,6 @@ The Cluster Observability Operator (COO) is an optional component of the OpenShi
         ![Alt text](./pics/prometheus_rules.jpg?raw=true "Prometheus ") 
 
 4. Configure AlertManager
-
     In order to create the alerts and send them to an external Alarms server, the alert manager has to be configured.
 
     1. Configure AlertManager requests and limits
