@@ -307,6 +307,7 @@ The Cluster Observability Operator (COO) is an optional component of the OpenShi
         3. Create namespace
            
             NOTE: The customized secret name should be: alertmanager-<namespace_monitoring-stack>-ms
+           
             For my test the secret name is “alertmanager-federate-cmo-ms”
 
             ```$bash
@@ -411,6 +412,7 @@ The Cluster Observability Operator (COO) is an optional component of the OpenShi
                 ```
 
         6. Validate that the Alert was sent to the alert server
+           
             https://webhook.site/#!/view/767c84e8-4707-4a85-bd2a-07174d2ad948/b9876c8d-6ec0-41f5-9ac3-e4583c3a61a1/1
 
             In my test I see two alerts forwarded by the alertmanager to the alert server. The first two alerts are firing in ROSA, the first is the Watchdog and the second is a memory warning. The third alert is the one created manually, above, in a previous step of this procedure:
@@ -430,20 +432,3 @@ The Cluster Observability Operator (COO) is an optional component of the OpenShi
 ## Also recommend checking the following blog:
 Step-by-step guide to configuring alerts in Cluster Observability Operator
 https://developers.redhat.com/articles/2024/12/16/step-step-guide-configuring-alerts-cluster-observability-operator?source=sso
-
-
-
-
-
-
-    5. Configure Routes to expose the Prometheus and Alertmanager UI deployed by COO
-
-    ```$bash
-    ```
-
-
-        1. Create namespace
-
-        ```$bash
-        ```
-   
