@@ -171,7 +171,7 @@ The Cluster Observability Operator (COO) is an optional component of the OpenShi
         prometheus-federate-cmo-ms-1 	3/3 	Running   0      	92s
         ```
 
-    5. Configure Routes to expose the Prometheus and Alertmanager UI deployed by COO
+    5. Configure Routes to expose the Alertmanager UI deployed by COO
 
         1. Prometheus
 
@@ -279,13 +279,6 @@ The Cluster Observability Operator (COO) is an optional component of the OpenShi
         git clone https://github.com/CSA-RH/rosahcp_platform-alerts_visibility.git
         oc create -f rosahcp_platform-alerts_visibility/files/all_prometheusrules.yaml
         ```
-
-    2. Validate
-
-        Check in Prometheus UI that the alerts rules have been created
-        Alerts configured in PrometheusRules are loaded in Prometheus UI
-       
-        ![Alt text](./pics/prometheus_rules.jpg?raw=true "Prometheus ") 
 
 4. Configure AlertManager
 
@@ -445,6 +438,6 @@ The Cluster Observability Operator (COO) is an optional component of the OpenShi
               
                 ![Alt text](./pics/alert3.jpg?raw=true "Alert ") 
 
-## Also recommend checking the following blog:
+### Also recommend checking the following blog:
 Step-by-step guide to configuring alerts in Cluster Observability Operator
 https://developers.redhat.com/articles/2024/12/16/step-step-guide-configuring-alerts-cluster-observability-operator?source=sso
