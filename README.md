@@ -1,7 +1,7 @@
 # ROSA HCP Federating Platform Metrics to Custom Monitoring Stack
 
 # Disclaimer
-?????This repo contains an opinionated demo and is NOT an official Red Hat documentation.
+This repo contains an opinionated demo and is NOT an official Red Hat documentation.
 
 # Introduction
 The objective of this document is to define a procedure to workaround the gap in ROSA HCP, which doesn't allow configuring an alert manager receiver to send platform alerts from the platform monitoring stack, towards a alerts server. 
