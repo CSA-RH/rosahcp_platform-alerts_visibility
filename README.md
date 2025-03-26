@@ -7,6 +7,8 @@ This content has not been tested on every configuration.
 The objective of this document is to define a procedure to workaround the gap in ROSA HCP, which doesn't allow configuring an alert manager receiver to send platform alerts from the platform monitoring stack, towards a alerts server. 
 The RFE (https://issues.redhat.com/browse/XCMSTRAT-976) is opened to allow configuring the monitoring stack alert manager with a receiver.
 
+The procedure described in this document was tested in ROSA HCP version 4.17.15.
+
 # Architecture
 The objective is to use the MonitoringStack CRD from the Cluster Observability Operator, this CRD will create an additional Monitoring stack (prometheus + alertmanager). The additional stack will scrap the federation endpoint of the ROSA platform Monitoring stack (running in openshift-monitoring namespace). The PrometheusRules object contains the rules that trigger alerts. The COO prometheus evaluates the PrometheusRules and sends the alerts to the COO alertmanager, which forwards the alert to a webhook.
 
