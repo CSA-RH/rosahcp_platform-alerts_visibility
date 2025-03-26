@@ -21,6 +21,8 @@ The objective is to use the MonitoringStack CRD from the Cluster Observability O
 # Procedure
 The Cluster Observability Operator (COO) is an optional component of the OpenShift Container Platform designed for creating and managing highly customizable monitoring stacks. It enables cluster administrators to automate configuration and management of monitoring needs extensively, offering a more tailored and detailed view of each namespace compared to the default OpenShift Container Platform monitoring system.
 
+Make sure to adapt the parameters to your own needs.
+
 1. Install Cluster Observability Operator
 
     1. Create namespace
